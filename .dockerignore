@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules
+npm-debug.log
+
+# Environment variables
+.env
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Local development files
+*.md
+*.log
+
+# Upload directory (optional, depends on your needs)
+uploads/*
+
+# Misc
+.DS_Store
+.vscode

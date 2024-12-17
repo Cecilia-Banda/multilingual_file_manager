@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Node.js Application
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: file-upload-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/fileuploaddb
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./:/usr/src/app
+      - upload-volume:/usr/src/app/uploads
+    networks:
+      - app-network
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=fileuploaddb
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - app-network
+
+  # Redis Service
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+# Persistent Volumes
+volumes:
+  mongodb-data:
+  redis-data:
+  upload-volume:
+
+# Network Configuration
+networks:
+  app-network:
+    driver: bridge
